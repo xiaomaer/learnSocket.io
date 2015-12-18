@@ -1,0 +1,8 @@
+{
+  "name": "realtime-message",
+  "version": "0.0.1",
+  "private":true,
+  "description": "my first realtime server",
+  "dependencies": {
+  }
+}

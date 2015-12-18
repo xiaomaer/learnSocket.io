@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>socket.io example</title>
+</head>
+<body>
+<h3>基础的socket.io example</h3>
+<h3>How many users are here?</h3>
+<p id="count"></p>
+<form action="#" id="btnsubmit">
+    <textarea id="message" rows="4" cols="30"></textarea>
+    <input type="submit" value="发送消息"/>
+</form>
+<div id="showmessage">
+    <h3>发送消息如下：</h3>
+</div>
+<!--如果在同一服务器上运行服务器和客户端，socket.io自动提供客户端的库-->
+<script src="/socket.io/socket.io.js"></script>
+<script>
+    var socket = io.connect('http://127.0.0.1:3000');//客户端连接到服务器
+    var doc = document,
+            count = doc.getElementById("count"),
+            message = doc.getElementById("message"),
+            submit = doc.getElementById('btnsubmit'),
+            show = doc.getElementById('showmessage');
+    //监听users事件，接收服务器发送来的数据并显示在页面上。
+    socket.on("users", function (data) {
+        count.innerHTML = data.number;
+    });
+    //通过表单添加发送的消息
+    submit.onsubmit = function () {
+        socket.emit('message', {text: message.value});//客户端发送消息给服务器
+        return false;//不提交表单
+    }
+    //监听push事件，接收服务器发送的消息，然后将消息显示在界面
+    socket.on('push', function (data) {
+        var pelem = doc.createElement("p"),
+                txt = doc.createTextNode(data.text);
+        pelem.appendChild(txt);
+        show.appendChild(pelem);
+    });
+</script>
+</body>
+</html>
